@@ -51,6 +51,7 @@ type Message {
 
 type Query {
   getMessage(id: ID!): Message
+  getAllMessages: [Message]
 }
 
 type Mutation {
@@ -87,6 +88,7 @@ var schema = buildSchema(/* GraphQL */`
 
   type Query {
     getMessage(id: ID!): Message
+    getAllMessages: [Message]
   }
 
   type Mutation {
@@ -113,6 +115,9 @@ var root = {
       throw new Error("no message exists with id " + id)
     }
     return new Message(id, fakeDatabase[id])
+  },
+  getAllMessages() {
+    return Object.keys(fakeDatabase).map(id => new Message(id, fakeDatabase[id]));
   },
   createMessage({ input }) {
     // Create a random id for our "database".
